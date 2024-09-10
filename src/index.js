@@ -1,4 +1,6 @@
-const UserRoutes = require('./api/routes/user.routes')
+const UserRoutes = require('./api/routes/user.routes');
+const PostRoutes = require('./api/routes/post.routes');
+const CommentRoutes = require('./api/routes/comment.routes');
 const express = require('express');
 const PORT = 3000;
 
@@ -10,18 +12,16 @@ const server = express();
 server.use(express.json());
 server.use(express.urlencoded({extended: false}));
 
-server.use('/api/user', UserRoutes)
+server.use('/api/user', UserRoutes);
+server.use('/api/posts', PostRoutes);
+server.use('/api/comments', CommentRoutes);
 
 server.use('*', (res, req, next) => {
     const err = new Error('Route not found');
     err.status = 404;
-    next(err)
-})
-
-// server.use( (err, res, req, next) => {
-//     return res.status(err.status || 500).json(err.message || 'Unexpected error')
-// })
+    next(err);
+});
 
 server.listen(PORT, () => {
-    console.log(`Server running in https://localhost:${PORT}`)
-})
+    console.log(`Server running on https://localhost:${PORT}`);
+});
