@@ -7,6 +7,9 @@ const PORT = 3000;
 const connectDB = require('./utils/db.js');
 connectDB();
 
+const seedDatabase = require('./api/seed/seed.js');
+seedDatabase()
+
 const server = express();
 
 server.use(express.json());

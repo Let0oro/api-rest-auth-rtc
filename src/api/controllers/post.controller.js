@@ -1,42 +1,53 @@
 const Post = require('../models/post.model');
 
-const createPost = async (req, res, next) => {
+const PostController = {};
+PostController.getAllPosts = async (req, res) => {
   try {
-    const newPost = new Post({ ...req.body, author: req.user._id });
-    const savedPost = await newPost.save();
-    return res.status(201).json(savedPost);
+    const posts = await Post.find();
+    res.status(200).json(posts);
   } catch (error) {
-    next(error);
+    res.status(500).json({ message: error.message });
   }
 };
 
-const getAllPosts = async (req, res, next) => {
+PostController.getPostById = async (req, res) => {
   try {
-    const posts = await Post.find().populate('author');
-    return res.status(200).json(posts);
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: "Post not found" });
+    res.status(200).json(post);
   } catch (error) {
-    next(error);
+    res.status(500).json({ message: error.message });
   }
 };
 
-const getPostById = async (req, res, next) => {
+PostController.createPost = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id).populate('author');
-    if (!post) return res.status(404).json({ message: 'Post not found' });
-    return res.status(200).json(post);
+    const newPost = new Post(req.body);
+    await newPost.save();
+    res.status(201).json(newPost);
   } catch (error) {
-    next(error);
+    res.status(400).json({ message: error.message });
   }
 };
 
-const deletePost = async (req, res, next) => {
+PostController.updatePost = async (req, res) => {
+  try {
+    const updatedPost = await Post.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!updatedPost) return res.status(404).json({ message: "Post not found" });
+    res.status(200).json(updatedPost);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+PostController.deletePost = async (req, res) => {
   try {
     const deletedPost = await Post.findByIdAndDelete(req.params.id);
-    if (!deletedPost) return res.status(404).json({ message: 'Post not found' });
-    return res.status(200).json({ message: 'Post deleted successfully' });
+    if (!deletedPost) return res.status(404).json({ message: "Post not found" });
+    res.status(200).json({ message: "Post deleted" });
   } catch (error) {
-    next(error);
+    res.status(500).json({ message: error.message });
   }
 };
 
-module.exports = { createPost, getAllPosts, getPostById, deletePost };
+module.exports = PostController;

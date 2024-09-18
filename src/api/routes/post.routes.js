@@ -1,15 +1,11 @@
-const PostRoutes = require('express').Router();
-const { isAuth, isAdmin } = require('../../middlewares/auth.middleware');
-const {
-  createPost,
-  getAllPosts,
-  getPostById,
-  deletePost,
-} = require('../controllers/post.controller');
+const express = require('express');
+const PostController = require('../controllers/post.controller');
+const router = express.Router();
 
-PostRoutes.post('/', [isAuth, isAdmin], createPost);
-PostRoutes.get('/', isAuth, getAllPosts);
-PostRoutes.get('/:id', isAuth, getPostById);
-PostRoutes.delete('/:id', [isAuth, isAdmin], deletePost);
+router.get('/', PostController.getAllPosts);
+router.get('/:id', PostController.getPostById);
+router.post('/', PostController.createPost);
+router.put('/:id', PostController.updatePost);
+router.delete('/:id', PostController.deletePost);
 
-module.exports = PostRoutes;
+module.exports = router;
