@@ -8,7 +8,7 @@ const {
 } = require("../controllers/comment.controller");
 
 CommentRoutes.post("/", [isAuth], createComment);
-CommentRoutes.get("/", isAuth, getAllComments);
+CommentRoutes.get("/", getAllComments);
 CommentRoutes.get("/:id", isAuth, getCommentById);
 CommentRoutes.delete("/:id", [isAuth, isAdmin], deleteComment);
 

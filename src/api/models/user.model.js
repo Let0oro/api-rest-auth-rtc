@@ -18,13 +18,9 @@ const userSchema = new mongoose.Schema(
       required: true,
       validate: [validator.isEmail, "Email is not valid"],
     },
-
+    rol: String,
   },
   {
-    rol: {
-      type: String,
-      default: "user",
-    },
     timestamps: true,
   }
 );
@@ -32,6 +28,7 @@ const userSchema = new mongoose.Schema(
 userSchema.pre("save", async function (next) {
   try {
     this.password = await bcrypt.hash(this.password, 10);
+    this.rol = "user"
     next();
   } catch (error) {
     next(error);

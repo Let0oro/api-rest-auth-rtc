@@ -1,7 +1,15 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const { generateToken } = require("../../utils/token");
+
+async function getAllUsers (req, res, next) {
+  try {
+    const users = await User.find();
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
 
 async function registerUser(req, res, next) {
   try {
@@ -89,6 +97,7 @@ async function deleteUser(req, res) {
 }
 
 module.exports = {
+  getAllUsers,
   registerUser,
   loginUser,
   logoutUser,

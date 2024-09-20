@@ -23,6 +23,7 @@ PostController.getPostById = async (req, res) => {
 
 PostController.createPost = async (req, res) => {
   try {
+    console.log(req.body)
     const newPost = new Post({ ...req.body, author: req.user._id });
     await newPost.save();
     res.status(201).json(newPost);

@@ -13,7 +13,7 @@ seedDatabase()
 const server = express();
 
 server.use(express.json());
-server.use(express.urlencoded({extended: false}));
+server.use(express.urlencoded({extended: true}));
 
 server.use('/api/user', UserRoutes);
 server.use('/api/posts', PostRoutes);
@@ -26,5 +26,5 @@ server.use('*', (res, req, next) => {
 });
 
 server.listen(PORT, () => {
-    console.log(`Server running on https://localhost:${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}`);
 });
