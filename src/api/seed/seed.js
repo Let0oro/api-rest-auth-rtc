@@ -18,17 +18,6 @@ const seedDatabase = async () => {
       console.log('Users seeded');
     }
 
-    const ids = await User.find().lean().select("_id");
-    if (posts.length === 0) {
-      const seedPosts = [
-        { author: ids[0], title: 'First Post', content: 'This is the first post' },
-        { author: ids[0], title: 'Second Post', content: 'This is the second post' }
-      ];
-
-      await Post.insertMany(seedPosts);
-      console.log('Posts seeded');
-    }
-
     mongoose.connection.close();
   } catch (error) {
     console.error(error);

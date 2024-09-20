@@ -1,6 +1,7 @@
-const Post = require('../models/post.model');
+const Post = require("../models/post.model");
 
 const PostController = {};
+
 PostController.getAllPosts = async (req, res) => {
   try {
     const posts = await Post.find();
@@ -22,7 +23,7 @@ PostController.getPostById = async (req, res) => {
 
 PostController.createPost = async (req, res) => {
   try {
-    const newPost = new Post(req.body);
+    const newPost = new Post({ ...req.body, author: req.user._id });
     await newPost.save();
     res.status(201).json(newPost);
   } catch (error) {
@@ -32,8 +33,11 @@ PostController.createPost = async (req, res) => {
 
 PostController.updatePost = async (req, res) => {
   try {
-    const updatedPost = await Post.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!updatedPost) return res.status(404).json({ message: "Post not found" });
+    const updatedPost = await Post.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    if (!updatedPost)
+      return res.status(404).json({ message: "Post not found" });
     res.status(200).json(updatedPost);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -43,7 +47,8 @@ PostController.updatePost = async (req, res) => {
 PostController.deletePost = async (req, res) => {
   try {
     const deletedPost = await Post.findByIdAndDelete(req.params.id);
-    if (!deletedPost) return res.status(404).json({ message: "Post not found" });
+    if (!deletedPost)
+      return res.status(404).json({ message: "Post not found" });
     res.status(200).json({ message: "Post deleted" });
   } catch (error) {
     res.status(500).json({ message: error.message });
